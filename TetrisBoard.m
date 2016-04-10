@@ -21,6 +21,10 @@ classdef (Sealed) TetrisBoard < handle % Singleton
         function [nrows, ncols] = getSize(obj)
             [nrows, ncols] = size(obj.pBoardMatrix);
         end
+        
+        function aMatrix = getBoardMatrix(obj)
+            aMatrix = obj.pBoardMatrix;
+        end
     end % End of public methods
     
     
