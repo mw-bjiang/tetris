@@ -1,8 +1,8 @@
 classdef (Sealed) TetrisBoard < handle % Singleton 
     properties (Access = public)
-        pHeight;
-        pWidth;
-        pBoardMatrix;
+        pHeight
+        pWidth
+        pBoardMatrix
     end % End of private properties
     
     
@@ -19,7 +19,8 @@ classdef (Sealed) TetrisBoard < handle % Singleton
     
     methods (Access = public)
         function [nrows, ncols] = getSize(obj)
-            [nrows, ncols] = size(obj.pBoardMatrix);
+            nrows = obj.pHeight;
+            ncols = obj.pWidth;
         end
         
         function aMatrix = getBoardMatrix(obj)
