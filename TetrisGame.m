@@ -20,7 +20,14 @@ classdef (Sealed) TetrisGame < handle % Singleton game class
     
     methods (Access = public)
         function obj = startGame(obj)
+            % Try instantiating one tetromino and let it fall
+            aFactory = TetriminosFactory(obj.pBoardObj);
+            aTetromino = aFactory.getTetromino(-1, [2, 4]);
             
+            for idx = 1 : 26 % Main loop
+                pause(0.3);
+                aTetromino.moveDown;
+            end
         end % End of startGame
     end % End of public methods
     
