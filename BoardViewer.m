@@ -4,6 +4,7 @@ classdef BoardViewer < handle
         pAxes               % Axes object
         pSquareMatrix       % A cell array of rectangle objects representing 
                             % the board
+        pBoardListener      % A listener to boardUpdate event for TetrisBoard
         
     end % End of private properties
     
@@ -12,7 +13,10 @@ classdef BoardViewer < handle
         function viewerObj = BoardViewer(aBoard)
             viewerObj.pBoard = aBoard;
             viewerObj.pAxes = viewerObj.createBoard;
+            viewerObj.pBoardListener = ...
+                addlistener(viewerObj.pBoard, 'boardUpdate', @viewerObj.boardUpdateHandler);
             viewerObj.pSquareMatrix = viewerObj.populateBoard;
+            viewerObj.viewBoard;
         end % End of ctor
         
         function delete(obj)
@@ -32,6 +36,10 @@ classdef BoardViewer < handle
                 obj.pSquareMatrix(idx).Visible = visibilityStr;
             end
         end
+        
+        function boardUpdateHandler(obj, ~, ~)
+            obj.viewBoard;
+        end % boardUpdateHandler
     end % End of public methods
     
     

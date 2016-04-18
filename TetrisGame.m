@@ -18,6 +18,13 @@ classdef (Sealed) TetrisGame < handle % Singleton game class
     end % End of static methods
     
     
+    methods (Access = public)
+        function obj = startGame(obj)
+            
+        end % End of startGame
+    end % End of public methods
+    
+    
     methods (Access = private)
         function gameObj = TetrisGame
             % Use default board height and width

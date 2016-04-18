@@ -6,6 +6,11 @@ classdef (Sealed) TetrisBoard < handle % Singleton
     end % End of private properties
     
     
+    events
+        boardUpdate
+    end
+    
+    
     methods(Static)
         function boardSingleton = createBoard(height, width)
             persistent localObj;
@@ -26,6 +31,22 @@ classdef (Sealed) TetrisBoard < handle % Singleton
         function aMatrix = getBoardMatrix(obj)
             aMatrix = obj.pBoardMatrix;
         end
+        
+        function obj = setTiles(obj, indexList)
+            % This function sets tiles specified in indexList to 1.
+            % indexList is an array of linear indices for pBoardMatrix.
+            % No boundary check. Tests should discover out-of-range
+            % indices.
+            obj.pBoardMatrix(indexList) = 1;
+            notify(obj, 'boardUpdate');
+        end % End of setTiles
+        
+        function obj = clearTiles(obj, indexList)
+            % This function sets tiles specified in indexList to 0.
+            % indexList is an array of linear indices for pBoardMatrix.
+            obj.pBoardMatrix(indexList) = 0;
+            notify(obj, 'boardUpdate');
+        end % End of clearTiles
     end % End of public methods
     
     
