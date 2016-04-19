@@ -1,17 +1,16 @@
-classdef Tetromino_T < Tetromino
+classdef Tetromino_J < Tetromino
 % Initial shape of the tetromino:
-%     *
-%   * * *
+%   * * *  
+%       *
 %   Order in pTiles:
-%     4     1               3
-%   1 2 3   2 4   3 2 1   4 2   
-%           3       4       1 
+%   1 2 3
+%       4
 % Use tile 2 as the rotation center
 % Initial position is specified by the leftmost tile
     methods
-        function obj = Tetromino_T(aBoard, initPosition)
+        function obj = Tetromino_J(aBoard, initPosition)
             if nargin == 1
-                initPosition = [2, 1];
+                initPosition = [1, 1];
             end
             
             if ~isequal([1, 2], size(initPosition))
@@ -26,8 +25,8 @@ classdef Tetromino_T < Tetromino
             initCol = initPosition(2);
             
             % Too lazy to do boundary checking
-            tilesRows = [initRow, initRow, initRow, initRow-1];
-            tilesCols = [initCol, initCol+1, initCol+2, initCol+1];
+            tilesRows = [initRow, initRow, initRow, initRow+1];
+            tilesCols = [initCol, initCol+1, initCol+2, initCol+2];
             
             obj.pTiles = sub2ind([obj.pNumberOfRows, obj.pNumberOfCols], ...
                 tilesRows, tilesCols);

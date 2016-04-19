@@ -27,13 +27,17 @@ classdef (Sealed) TetrisGame < handle % Singleton game class
             % Try instantiating one tetromino and let it fall
             aFactory = TetriminosFactory(obj.pBoardObj);
             obj.pActiveTetromino = aFactory.getTetromino(-1, [2, 4]);
-            
+
             obj.pGameStatus = 1;
             obj.pBoardViewer.toFront;
             % Game loop
             while obj.pGameStatus == 1
                 pause(0.3);
                 obj.pActiveTetromino.moveDown;
+                
+                if ~obj.pActiveTetromino.positionChanged
+                    obj.pActiveTetromino = aFactory.getTetromino(-1, [2, 4]);
+                end
             end
 %             for idx = 1 : 5 % Main loop
 %                 pause(0.3);
@@ -69,6 +73,10 @@ classdef (Sealed) TetrisGame < handle % Singleton game class
                         obj.pActiveTetromino.moveLeft;
                     case 'rightarrow'
                         obj.pActiveTetromino.moveRight;
+                    case 'downarrow'
+                        obj.pActiveTetromino.moveDown;
+                    case 'uparrow'
+                        obj.pActiveTetromino.rotate;
                 end
             end
         end % End of keyPressEventHandler

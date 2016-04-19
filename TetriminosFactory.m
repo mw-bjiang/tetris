@@ -12,7 +12,8 @@ classdef TetriminosFactory < handle
             [obj.pNumberOfRows, obj.pNumberOfCols] = aBoard.getSize;
             
             % Hard-code type list
-            obj.pTypeList = {'Tetromino_T'}; % The string is just for doc purpose
+            obj.pTypeList = {'Tetromino_T', ...
+                             'Tetromino_J'}; % The string is just for doc purpose
         end
         
         function aTetromino = getTetromino(obj, index, initPosition)
@@ -40,6 +41,8 @@ classdef TetriminosFactory < handle
             switch index
                 case 1
                     aTetromino = Tetromino_T(obj.pBoardObj, initPosition);
+                case 2
+                    aTetromino = Tetromino_J(obj.pBoardObj, initPosition);
             end
         end
     end % End of public methods

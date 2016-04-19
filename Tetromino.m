@@ -3,14 +3,15 @@ classdef (Abstract) Tetromino < handle
         pBoardObj TetrisBoard
         pNumberOfRows
         pNumberOfCols
-        pTiles          % 1-by-4 array which represents a tetromino's position on the board
-                        % Linear indexing        
+        pTiles              % 1-by-4 array which represents a tetromino's position on the board
+                            % Linear indexing
+        pRotationEnum = 1;  % Enumeration: 1, 2, 3, 4
+        pPositionChanged    % A boolean indicating whether the position changed
     end % End of protected properties
     
     
     methods (Abstract)
         output = isValid(obj)
-        rotate(obj, direction)
     end % End of abstract methods
     
     
@@ -18,7 +19,12 @@ classdef (Abstract) Tetromino < handle
         function obj = Tetromino(aBoard)
             obj.pBoardObj = aBoard;
             [obj.pNumberOfRows, obj.pNumberOfCols] = aBoard.getSize;
+            obj.pPositionChanged = 1;
         end % End of abstract constructor
+        
+        function ischanged = positionChanged(obj)
+            ischanged = obj.pPositionChanged;
+        end % End of positionChanged
         
         function moveDown(obj)
             obj.pBoardObj.clearTiles(obj.pTiles);
@@ -28,8 +34,11 @@ classdef (Abstract) Tetromino < handle
             
             [rowIndices, colIndices] = ind2sub([nrows, ncols], obj.pTiles);
             rowIndices = rowIndices + 1;
+            obj.pPositionChanged = true;
+            
             if obj.isTetrominoBlocked(rowIndices, colIndices)
                 rowIndices = rowIndices - 1;
+                obj.pPositionChanged = false;
             end
             
             obj.pTiles = sub2ind([nrows, ncols], rowIndices, colIndices);
@@ -47,9 +56,36 @@ classdef (Abstract) Tetromino < handle
             obj.horizontalMove(1);      
             obj.pBoardObj.setTiles(obj.pTiles);
         end
+        
+        function rotate(obj, centerIdx)
+            obj.pBoardObj.clearTiles(obj.pTiles);
+            
+            % Rotate the tetromino clockwise
+            nrows = obj.pNumberOfRows;
+            ncols = obj.pNumberOfCols;
+            
+            [rowIndices, colIndices] = ind2sub([nrows, ncols], obj.pTiles);
+            relativeRows = rowIndices - rowIndices(centerIdx);
+            relativeCols = colIndices - colIndices(centerIdx);
+            
+            % Rotation matrix: [0, 1; -1, 0]
+            newIndices = [0, 1; -1, 0] * [relativeCols; relativeRows];
+            newRowIndices = newIndices(2, :) + rowIndices(centerIdx);
+            newColIndices = newIndices(1, :) + colIndices(centerIdx);
+            
+            obj.pPositionChanged = false;
+            if ~obj.isTetrominoBlocked(newRowIndices, newColIndices)
+                rowIndices = newRowIndices;
+                colIndices = newColIndices;
+                obj.pPositionChanged = true;
+            end
+            
+            obj.pTiles = sub2ind([nrows, ncols], rowIndices, colIndices);
+            obj.pBoardObj.setTiles(obj.pTiles);
+        end
     end % End of public methods
     
-    methods (Access = private)
+    methods (Access = protected)
         function isblocked = isTetrominoBlocked(obj, rowIndices, colIndices)
             % This function is used to determine whether a tetromino can
             % move to a new place by checking if there is already a
@@ -94,9 +130,11 @@ classdef (Abstract) Tetromino < handle
             
             [rowIndices, colIndices] = ind2sub([nrows, ncols], obj.pTiles);
             colIndices = colIndices + dir;
+            obj.pPositionChanged = true;
             
             if obj.isTetrominoBlocked(rowIndices, colIndices)
                 colIndices = colIndices - dir;
+                obj.pPositionChanged = false;
             end
             
             obj.pTiles = sub2ind([nrows, ncols], rowIndices, colIndices);
