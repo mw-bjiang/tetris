@@ -28,7 +28,7 @@ classdef (Abstract) Tetromino < handle
             
             [rowIndices, colIndices] = ind2sub([nrows, ncols], obj.pTiles);
             rowIndices = rowIndices + 1;
-            if max(rowIndices) > nrows
+            if obj.isTetrominoBlocked(rowIndices, colIndices)
                 rowIndices = rowIndices - 1;
             end
             
@@ -75,6 +75,7 @@ classdef (Abstract) Tetromino < handle
                 return;
             end
             
+            % Check collision
             tiles = sub2ind([nrows, ncols], rowIndices, colIndices);
             brdMatrix = obj.pBoardObj.getBoardMatrix;
             tileValue = brdMatrix(tiles);

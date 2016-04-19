@@ -1,6 +1,7 @@
 classdef BoardViewer < handle
     properties (Access = public)
         pBoard TetrisBoard  % Restrict property values
+        pFig                % Figure object
         pAxes               % Axes object
         pSquareMatrix       % A cell array of rectangle objects representing 
                             % the board
@@ -8,11 +9,17 @@ classdef BoardViewer < handle
         
     end % End of private properties
     
+    events
+        KeyPressEvent       % Key press event can only be associated with a
+                            % figure. View would not handle this event. It
+                            % simply notifies the controller
+    end
+    
     
     methods (Access = public)
         function viewerObj = BoardViewer(aBoard)
             viewerObj.pBoard = aBoard;
-            viewerObj.pAxes = viewerObj.createBoard;
+            [viewerObj.pFig, viewerObj.pAxes] = viewerObj.createBoard;
             viewerObj.pBoardListener = ...
                 addlistener(viewerObj.pBoard, 'boardUpdate', @viewerObj.boardUpdateHandler);
             viewerObj.pSquareMatrix = viewerObj.populateBoard;
@@ -35,16 +42,17 @@ classdef BoardViewer < handle
                 end
                 obj.pSquareMatrix(idx).Visible = visibilityStr;
             end
-        end
+        end % End of viewBoard
         
-        function boardUpdateHandler(obj, ~, ~)
-            obj.viewBoard;
-        end % boardUpdateHandler
+        function toFront(obj)
+            % Bring the figure to front
+            figure(obj.pFig);
+        end % End of toFront
     end % End of public methods
     
     
     methods (Access = private)
-        function axObj = createBoard(obj)
+        function [figObj, axObj] = createBoard(obj)
             % Here we take simplicity over flexibility, which is probably
             % not a good idea in real-world design
             % For example, we assume an underlying axes and use the unit
@@ -57,6 +65,9 @@ classdef BoardViewer < handle
             axObj.XTick = [];
             axObj.YTick = [];
             axObj.Box = 'on';
+            
+            figObj = axObj.Parent;
+            figObj.KeyPressFcn = @obj.broadcastKeyPressEvent;
         end % End of createBoardView
         
         function squareMatrix = populateBoard(obj)
@@ -73,5 +84,21 @@ classdef BoardViewer < handle
                 end
             end
         end % End of populateBoard
+        
+        function boardUpdateHandler(obj, ~, ~)
+            obj.viewBoard;
+        end % boardUpdateHandler
+        
+        function broadcastKeyPressEvent(obj, ~, eventdata)
+            % ~ (src): the figure object that triggers the event
+            % eventdata: an object with properties:
+            %   Character
+            %   Modifier
+            %   Key
+            %   Source
+            %   EventName
+            keypressEventDataObj = KeyPressEventData(eventdata);
+            notify(obj, 'KeyPressEvent', keypressEventDataObj);
+        end % End of broadcastKeyPressEvent
     end % End of private methods
 end % End of classdef

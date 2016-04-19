@@ -4,6 +4,10 @@ classdef (Sealed) TetrisGame < handle % Singleton game class
         pBoardWidth  = 10;
         pBoardObj;              % Board object
         pBoardViewer;           % Board viewer object
+        pKeyPressListener;      % A listener to BoardViewer's KeyPressEvent
+        pGameStatus = 0;        % 0: not started
+                                % 1: ongoing
+        pActiveTetromino
     end % End of private properties
     
     
@@ -22,17 +26,24 @@ classdef (Sealed) TetrisGame < handle % Singleton game class
         function obj = startGame(obj)
             % Try instantiating one tetromino and let it fall
             aFactory = TetriminosFactory(obj.pBoardObj);
-            aTetromino = aFactory.getTetromino(-1, [2, 4]);
+            obj.pActiveTetromino = aFactory.getTetromino(-1, [2, 4]);
             
-            for idx = 1 : 5 % Main loop
+            obj.pGameStatus = 1;
+            obj.pBoardViewer.toFront;
+            % Game loop
+            while obj.pGameStatus == 1
                 pause(0.3);
-                aTetromino.moveLeft;
+                obj.pActiveTetromino.moveDown;
             end
-            
-            for idx = 1 : 5
-                pause(0.3);
-                aTetromino.moveRight;
-            end
+%             for idx = 1 : 5 % Main loop
+%                 pause(0.3);
+%                 aTetromino.moveLeft;
+%             end
+%             
+%             for idx = 1 : 5
+%                 pause(0.3);
+%                 aTetromino.moveRight;
+%             end
         end % End of startGame
     end % End of public methods
     
@@ -43,7 +54,24 @@ classdef (Sealed) TetrisGame < handle % Singleton game class
             gameObj.pBoardObj = TetrisBoard.createBoard( ...
                 gameObj.pBoardHeight, gameObj.pBoardWidth);
             gameObj.pBoardViewer = BoardViewer(gameObj.pBoardObj);
+            gameObj.pKeyPressListener = addlistener( ...
+                gameObj.pBoardViewer, 'KeyPressEvent', @gameObj.keyPressEventHandler);
         end % End of private ctor
+        
+        function keyPressEventHandler(obj, ~, eventdata)
+            keypressData = eventdata.pKeyPressEventObj;
+            
+            if obj.pGameStatus == 1
+                switch keypressData.Key
+                    case 'escape'
+                        obj.pGameStatus = 0;
+                    case 'leftarrow'
+                        obj.pActiveTetromino.moveLeft;
+                    case 'rightarrow'
+                        obj.pActiveTetromino.moveRight;
+                end
+            end
+        end % End of keyPressEventHandler
     end % End of private methods
     
 end % End of classdef
