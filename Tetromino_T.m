@@ -18,7 +18,8 @@ classdef Tetromino_T < Tetromino
                 throw(ME);
             end
             
-            obj.pBoardObj = aBoard;
+            obj@Tetromino(aBoard)
+            
             initRow = initPosition(1);
             initCol = initPosition(2);
             
@@ -26,15 +27,15 @@ classdef Tetromino_T < Tetromino
             tilesRows = [initRow, initRow, initRow, initRow-1];
             tilesCols = [initCol, initCol+1, initCol+2, initCol+1];
             
-            [nrows, ncols] = aBoard.getSize;
-            obj.pTiles = sub2ind([nrows, ncols], tilesRows, tilesCols);
+            obj.pTiles = sub2ind([obj.pNumberOfRows, obj.pNumberOfCols], ...
+                tilesRows, tilesCols);
         end
         
         function isTileValid = isValid(obj)
             isTileValid = true;
         end
         
-        function obj = rotate(obj, direction)
+        function rotate(obj, direction)
             obj.pTiles = obj.pTiles;
         end
     end % End of public methods

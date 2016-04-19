@@ -24,9 +24,14 @@ classdef (Sealed) TetrisGame < handle % Singleton game class
             aFactory = TetriminosFactory(obj.pBoardObj);
             aTetromino = aFactory.getTetromino(-1, [2, 4]);
             
-            for idx = 1 : 26 % Main loop
+            for idx = 1 : 5 % Main loop
                 pause(0.3);
-                aTetromino.moveDown;
+                aTetromino.moveLeft;
+            end
+            
+            for idx = 1 : 5
+                pause(0.3);
+                aTetromino.moveRight;
             end
         end % End of startGame
     end % End of public methods
