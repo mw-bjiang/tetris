@@ -28,20 +28,7 @@ classdef (Abstract) Tetromino < handle
         
         function moveDown(obj)
             obj.pBoardObj.clearTiles(obj.pTiles);
-            
-            nrows = obj.pNumberOfRows;
-            ncols = obj.pNumberOfCols;
-            
-            [rowIndices, colIndices] = ind2sub([nrows, ncols], obj.pTiles);
-            rowIndices = rowIndices + 1;
-            obj.pPositionChanged = true;
-            
-            if obj.isTetrominoBlocked(rowIndices, colIndices)
-                rowIndices = rowIndices - 1;
-                obj.pPositionChanged = false;
-            end
-            
-            obj.pTiles = sub2ind([nrows, ncols], rowIndices, colIndices);
+            obj.verticalMove(1);
             obj.pBoardObj.setTiles(obj.pTiles);
         end % End of fall
         
@@ -124,7 +111,7 @@ classdef (Abstract) Tetromino < handle
         function horizontalMove(obj, dir)
             % Move the tetromino horizontally.
             % dir = -1: left
-            % dir = 1: right
+            % dir = 1 : right
             nrows = obj.pNumberOfRows;
             ncols = obj.pNumberOfCols;
             
@@ -139,5 +126,24 @@ classdef (Abstract) Tetromino < handle
             
             obj.pTiles = sub2ind([nrows, ncols], rowIndices, colIndices);
         end % End of horizontalMove
+        
+        function verticalMove(obj, dir)
+            % Move the tetromino vertically.
+            % dir = 1 : down
+            % dir = -1: up
+            nrows = obj.pNumberOfRows;
+            ncols = obj.pNumberOfCols;
+            
+            [rowIndices, colIndices] = ind2sub([nrows, ncols], obj.pTiles);
+            rowIndices = rowIndices + dir;
+            obj.pPositionChanged = true;
+            
+            if obj.isTetrominoBlocked(rowIndices, colIndices)
+                rowIndices = rowIndices - 1;
+                obj.pPositionChanged = false;
+            end
+            
+            obj.pTiles = sub2ind([nrows, ncols], rowIndices, colIndices);
+        end % End of verticalMove
     end % End of private methods
 end 

@@ -3,9 +3,8 @@ classdef Tetromino_T < Tetromino
 %     *
 %   * * *
 %   Order in pTiles:
-%     4     1               3
-%   1 2 3   2 4   3 2 1   4 2   
-%           3       4       1 
+%     4
+%   1 2 3
 % Use tile 2 as the rotation center
 % Initial position is specified by the leftmost tile
     methods
