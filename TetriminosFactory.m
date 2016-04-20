@@ -13,7 +13,12 @@ classdef TetriminosFactory < handle
             
             % Hard-code type list
             obj.pTypeList = {'Tetromino_T', ...
-                             'Tetromino_J'}; % The string is just for doc purpose
+                             'Tetromino_J', ...
+                             'Tetromino_I', ...
+                             'Tetromino_L', ...
+                             'Tetromino_O', ...
+                             'Tetromino_S', ...
+                             'Tetromino_Z'}; % The string is just for doc purpose
         end
         
         function aTetromino = getTetromino(obj, index, initPosition)
@@ -43,6 +48,16 @@ classdef TetriminosFactory < handle
                     aTetromino = Tetromino_T(obj.pBoardObj, initPosition);
                 case 2
                     aTetromino = Tetromino_J(obj.pBoardObj, initPosition);
+                case 3
+                    aTetromino = Tetromino_I(obj.pBoardObj, initPosition);
+                case 4
+                    aTetromino = Tetromino_L(obj.pBoardObj, initPosition);
+                case 5
+                    aTetromino = Tetromino_O(obj.pBoardObj, initPosition);
+                case 6
+                    aTetromino = Tetromino_S(obj.pBoardObj, initPosition);
+                case 7
+                    aTetromino = Tetromino_Z(obj.pBoardObj, initPosition);
             end
         end
     end % End of public methods

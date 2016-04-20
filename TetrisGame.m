@@ -36,18 +36,10 @@ classdef (Sealed) TetrisGame < handle % Singleton game class
                 obj.pActiveTetromino.moveDown;
                 
                 if ~obj.pActiveTetromino.positionChanged
+                    obj.pBoardObj.eliminateRows;
                     obj.pActiveTetromino = aFactory.getTetromino(-1, [2, 4]);
                 end
             end
-%             for idx = 1 : 5 % Main loop
-%                 pause(0.3);
-%                 aTetromino.moveLeft;
-%             end
-%             
-%             for idx = 1 : 5
-%                 pause(0.3);
-%                 aTetromino.moveRight;
-%             end
         end % End of startGame
     end % End of public methods
     

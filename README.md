@@ -7,11 +7,10 @@ Get started:
     >> aGame = TetrisGame.createGame;
     >> aGame.startGame
 
-    (At the time this instruction is written, the game is not fully completed yet.
-     You can use left/right arrows to control the tetromino, use the up arrow
-     to rotate it, or use the down arrow to accelerate.
-     However, I haven't implemented elimination mechanism and point system, but
-     these features will be coming soon)
+    
+    You can use left/right arrows to control the tetromino, use the up arrow
+    to rotate it, or use the down arrow to accelerate.
+    Press the Esc key to stop the game.
 
 
 Class design:
@@ -25,3 +24,8 @@ Class design:
     A tetromino with a specific shape inherits from Tetromino and initialize its shape.
 
     TetriminosFactory is used for easy creation of different kinds of tetriminos.
+
+TODO:
+    Add point system
+    Add clean up logic
+    Mark different Tetriminos with different colors
