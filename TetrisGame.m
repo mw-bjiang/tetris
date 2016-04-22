@@ -50,6 +50,7 @@ classdef (Sealed) TetrisGame < handle % Singleton game class
             gameObj.pBoardObj = TetrisBoard.createBoard( ...
                 gameObj.pBoardHeight, gameObj.pBoardWidth);
             gameObj.pBoardViewer = BoardViewer(gameObj.pBoardObj);
+            gameObj.pBoardViewer.setVisibility(0);
             gameObj.pKeyPressListener = addlistener( ...
                 gameObj.pBoardViewer, 'KeyPressEvent', @gameObj.keyPressEventHandler);
         end % End of private ctor

@@ -44,8 +44,20 @@ classdef BoardViewer < handle
             end
         end % End of viewBoard
         
+        function setVisibility(obj, isVisible)
+            if isVisible == true || strcmp(isVisible, 'on')
+                visibilityStr = 'on';
+            elseif isVisible == false || strcmp(isVisible, 'off')
+                visibilityStr = 'off';
+            else
+                visibilityStr = 'off'; % default off
+            end
+            obj.pFig.Visible = visibilityStr;
+        end
+        
         function toFront(obj)
             % Bring the figure to front
+            obj.pFig.Visible = 'on';
             figure(obj.pFig);
         end % End of toFront
     end % End of public methods
